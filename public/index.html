@@ -1,0 +1,52 @@
+<html>
+<head>
+	<title>A Deeper Reds</title>
+	<meta name="description" content="A tool to help you read fatser">
+	<meta name="author" content="Josh Batchelor">
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/a-deeper-reds.css">
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="js/a-deeper-reds.js"></script>
+</head>
+<body>
+	<div class="container" id="main">
+		<h1>A Deeper Reds</h1>
+		<p>A tool to help you read faster</p>
+		<hr>
+		<div class="row" id="textarea">
+			<textarea class="col-md-6 col-md-offset-3" onchange="updateText()" autofocus=true 
+			placeholder="Paste your text here..." id="text">Hello World this is me.</textarea>
+		</div>
+		<div class="row" id="control-btns">
+			<div class="col-md-2 col-md-offset-3">
+				<button class="btn btn-default" onclick="stepBackward()">
+					<span class="glyphicon glyphicon-step-backward"></span>
+				</button>
+			</div>
+			<div class="col-md-2">
+				<button class="btn btn-default" onclick="play()">
+					<span class="glyphicon glyphicon-play" id="play-btn"></span>
+				</button>
+			</div>
+			<div class="col-md-2">
+				<button class="btn btn-default" onclick="stepForward()">
+				<span class="glyphicon glyphicon-step-forward"></span>
+			</button>
+			</div>
+		</div>
+		<div class="row" id="reading-area">
+				<div class="ascii-line">
+					━━━━━━━━━━━━━┳━━━━━━━━━━━━━
+				</div>
+				<div class="row">
+					<!-- <span id="previous-word"></span> -->
+					<span id="current-word"></span>
+					<!-- <span id="next-word"></span> -->
+				</div>
+				<div class"ascii-line">
+					━━━━━━━━━━━━━┻━━━━━━━━━━━━━
+				</div>
+			</div>
+	</div>
+</body>
+</html>
