@@ -29,13 +29,14 @@ function stepBackward(){
 	if(highlightedIndex >= 1){
 		highlightedIndex--;
 	}
+	wordIndex = -1;
 	highlightParagraph(highlightedIndex);
 
-	buildWordArray();
 }
 
 function stepForward(){
 	highlightedIndex++;
+	wordIndex = -1;
 	highlightParagraph(highlightedIndex);
 }
 
@@ -52,8 +53,8 @@ function nextWord(){
 		if(len % 2 == 0){
 			wordArray[highlightedIndex][wordIndex] = ' ' + wordArray[highlightedIndex][wordIndex];
 		}
-		colorLetter();
-		$('#current-word').html(wordArray[highlightedIndex][wordIndex]);
+		var word = colorLetter();
+		$('#current-word').html(word);
 	}
 	else{
 		pause();
@@ -97,7 +98,7 @@ function colorLetter(){
 	var end = word.substring(middleIndex + 1, word.length);
 	letter = '<span style="color:red">' + letter + '</span>';
 
-	wordArray[highlightedIndex][wordIndex] = beg + letter + end;
+	return beg + letter + end;
 }
 
 function cleanArray(array){
