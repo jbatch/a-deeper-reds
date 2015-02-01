@@ -27,3 +27,6 @@ always in the middle but hey.
 You can use the config area to choose how many words per minute you want it to
 read at and how long to pause on periods and commas (NOTE: this is not yet
 implemented.)
+
+##Live Page
+You can see this page live at [red.jbat.ch](red.jbat.ch)
