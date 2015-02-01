@@ -6,7 +6,7 @@ var pausePeriod = 1.5;
 var pauseComma = 0.5;
 var highlightedIndex = -1;
 
-var wpm = 300;
+var wpm = 100;
 
 var timer;
 
@@ -171,9 +171,6 @@ function saveConfig(){
 	wpm = $('#wpm').val();
 	pausePeriod = $('#pausePeriod').val();
 	pauseComma = $('#pauseComma').val();
-	console.log(wpm);
-	console.log(pausePeriod);
-	console.log(pauseComma);
 }
 
 
