@@ -4,6 +4,7 @@ var i = 0;
 var playing = false;
 var pausePeriod = 1.5;
 var pauseComma = 0.5;
+var highlightedIndex = -1;
 
 var wpm = 300;
 
@@ -25,10 +26,18 @@ function updateText(){
 }
 
 function stepBackward(){
-	highlightParagraph(2);
+	if(highlightedIndex >= 1){
+		highlightedIndex--;
+	}
+	highlightParagraph(highlightedIndex);
 }
 
 function stepForward(){
+	highlightedIndex++;
+	highlightParagraph(highlightedIndex);
+}
+
+function nextWord(){
 	i++;
 	if(i < wordArray.length)
 	{
@@ -49,7 +58,6 @@ function play(){
 	if(!playing)
 	{
 		
-
 		console.log('play');
 		text = $('#text').val();
 
@@ -72,7 +80,7 @@ function play(){
 		$('#play-btn').removeClass('glyphicon-play').addClass('glyphicon-pause');
 		playing = true;
 
-		timer = setInterval(stepForward, 60000/wpm);
+		timer = setInterval(nextWord, 60000/wpm);
 	}
 	else{
 		pause();
@@ -119,32 +127,43 @@ function highlightParagraph(index){
 	var start = 0;
 	var end = 0;
 	var currChar;
-	var text = $('#text').val() + '\n';
+	//In case text doesn't end in a \n\n
+	var text = $('#text').val() + '\n\n';
+	var max = text.length;
 	
 	while(newLineCount < index){
-		console.log(curr);
 		currChar = text.charAt(curr);
 		if(currChar == '\n'){
-			newLineCount++;
+			if(text.charAt(curr + 1) == '\n'){
+				newLineCount++;
+				curr++;
+			}
 		}
 		curr++;
 	}
 	start = curr;
-	console.log('new');
-	while(newLineCount == index){
-		console.log(curr);
+	while(newLineCount == index && curr <= max){
 		currChar = text.charAt(curr);
 		if(currChar == '\n'){
-			end = curr;
-			newLineCount++;
+			if(text.charAt(curr + 1) == '\n'){
+				end = curr;
+				newLineCount++;
+			}
 		}
 		curr++;
 	}
 
-	// console.log(start);
-	// console.log(end);
-	$('#text').selectRange(start, end);
+	if(curr > max){
+		highlightedIndex--;
+		highlightParagraph(highlightedIndex);
+	}
+	else{
+		$('#text').selectRange(start, end);
+	}
+
+	
 }
+
 
 
 
