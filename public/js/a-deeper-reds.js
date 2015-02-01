@@ -167,8 +167,14 @@ function buildWordArray(){
 	console.log(wordArray);
 }
 
-
-
+function saveConfig(){
+	wpm = $('#wpm').val();
+	pausePeriod = $('#pausePeriod').val();
+	pauseComma = $('#pauseComma').val();
+	console.log(wpm);
+	console.log(pausePeriod);
+	console.log(pauseComma);
+}
 
 
 

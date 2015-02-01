@@ -24,10 +24,15 @@ body {
 	font-size: 1.5em;
 }
 
-#current-word {
-	/*text-align: left;*/
+.selector {
+	width: 75px;
 }
 
-#next-word, #current-word{
-	white-space: pre;
+label {
+	display: block;
+}
+
+#config-btn button{
+	margin-top: 20px;
+	float: right;
 }
