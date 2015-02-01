@@ -29,4 +29,4 @@ read at and how long to pause on periods and commas (NOTE: this is not yet
 implemented.)
 
 ##Live Page
-You can see this page live at [red.jbat.ch](red.jbat.ch)
+You can see this page live at [red.jbat.ch](http://red.jbat.ch)
