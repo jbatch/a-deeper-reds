@@ -1,6 +1,6 @@
 var text = '';
 var wordArray = [];
-var i = 0;
+var wordIndex;
 var playing = false;
 var pausePeriod = 1.5;
 var pauseComma = 0.5;
@@ -30,6 +30,8 @@ function stepBackward(){
 		highlightedIndex--;
 	}
 	highlightParagraph(highlightedIndex);
+
+	buildWordArray();
 }
 
 function stepForward(){
@@ -38,15 +40,20 @@ function stepForward(){
 }
 
 function nextWord(){
-	i++;
-	if(i < wordArray.length)
+	wordIndex++;
+	if(wordIndex > wordArray[highlightedIndex].length){
+		wordIndex = 0;
+		highlightedIndex++;
+		highlightParagraph(highlightedIndex);
+	}
+	if(playing)
 	{
-		len = wordArray[i].length;
+		var len = wordArray[highlightedIndex][wordIndex].length;
 		if(len % 2 == 0){
-			wordArray[i] = ' ' + wordArray[i];
+			wordArray[highlightedIndex][wordIndex] = ' ' + wordArray[highlightedIndex][wordIndex];
 		}
 		colorLetter();
-		$('#current-word').html(wordArray[i]);
+		$('#current-word').html(wordArray[highlightedIndex][wordIndex]);
 	}
 	else{
 		pause();
@@ -57,28 +64,17 @@ function nextWord(){
 function play(){
 	if(!playing)
 	{
-		
-		console.log('play');
-		text = $('#text').val();
+		wordIndex = -1;
 
-		var paraArray = text.split('\n');
-		console.log(cleanArray(paraArray));
-
-		wordArray = text.split(' ');
-		i = 0;
-
-		var len = wordArray[0].length;
-
-		if(len % 2 == 0){
-			wordArray[0] = ' ' + wordArray[0];
+		if(highlightedIndex == -1){
+			highlightedIndex = 0;
 		}
 
-		colorLetter();
+		buildWordArray();
+		highlightParagraph(highlightedIndex);
 
-		$('#current-word').html(wordArray[0]);
-
-		$('#play-btn').removeClass('glyphicon-play').addClass('glyphicon-pause');
 		playing = true;
+		$('#play-btn').removeClass('glyphicon-play').addClass('glyphicon-pause');
 
 		timer = setInterval(nextWord, 60000/wpm);
 	}
@@ -88,25 +84,20 @@ function play(){
 }
 
 function pause(){
-	console.log('pause');
 	clearInterval(timer);
 	$('#play-btn').removeClass('glyphicon-pause').addClass('glyphicon-play');
 	playing = false;
 }
 
 function colorLetter(){
-	var word = wordArray[i];
-	console.log(word);
+	var word = wordArray[highlightedIndex][wordIndex];
 	var middleIndex = Math.ceil(word.length / 2) - 1;
-	console.log(middleIndex);
 	var letter = word.charAt(middleIndex);
 	var beg = word.substring(0, middleIndex);
 	var end = word.substring(middleIndex + 1, word.length);
 	letter = '<span style="color:red">' + letter + '</span>';
 
-	console.log(beg);
-
-	wordArray[i] = beg + letter + end;
+	wordArray[highlightedIndex][wordIndex] = beg + letter + end;
 }
 
 function cleanArray(array){
@@ -155,16 +146,25 @@ function highlightParagraph(index){
 
 	if(curr > max){
 		highlightedIndex--;
+		playing = false;
 		highlightParagraph(highlightedIndex);
 	}
 	else{
 		$('#text').selectRange(start, end);
 	}
-
-	
 }
 
+function buildWordArray(){
+	var text = $('#text').val();
+	var paraArray = cleanArray(text.split('\n\n'));
 
+	for(var ii = 0; ii < paraArray.length; ii++){
+		paraArray[ii] = paraArray[ii].replace('\n', ' ');
+		wordArray[ii] = paraArray[ii].split(' ');
+	}
+
+	console.log(wordArray);
+}
 
 
 
