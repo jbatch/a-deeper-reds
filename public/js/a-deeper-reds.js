@@ -2,18 +2,19 @@ var text = '';
 var wordArray = [];
 var wordIndex;
 var playing = false;
-var pausePeriod = 1.5;
-var pauseComma = 0.5;
+var pausePeriod = 2;
+var pauseComma = 1;
 var highlightedIndex = -1;
+var wordsToPause = 0;
 
-var wpm = 100;
+var wpm = 300;
 
 var timer;
 
 // This is pretty great. Thankyou beiyuu
 // https://gist.github.com/beiyuu/2029907
 $.fn.selectRange = function(start, end) {
-    var e = document.getElementById($(this).attr('id')); // I don't know why... but $(this) don't want to work today :-/
+    var e = document.getElementById($(this).attr('id'));
     if (!e) return;
     else if (e.setSelectionRange) { e.focus(); e.setSelectionRange(start, end); } /* WebKit */ 
     else if (e.createTextRange) { var range = e.createTextRange(); range.collapse(true); range.moveEnd('character', end); range.moveStart('character', start); range.select(); } /* IE */
@@ -41,25 +42,38 @@ function stepForward(){
 }
 
 function nextWord(){
-	wordIndex++;
-	if(wordIndex > wordArray[highlightedIndex].length){
-		wordIndex = 0;
-		highlightedIndex++;
-		highlightParagraph(highlightedIndex);
-	}
-	if(playing)
-	{
-		var len = wordArray[highlightedIndex][wordIndex].length;
-		if(len % 2 == 0){
-			wordArray[highlightedIndex][wordIndex] = ' ' + wordArray[highlightedIndex][wordIndex];
+	if(wordsToPause == 0){
+		wordIndex++;
+
+		if(wordIndex > wordArray[highlightedIndex].length){
+			wordIndex = 0;
+			highlightedIndex++;
+			highlightParagraph(highlightedIndex);
 		}
-		var word = colorLetter();
-		$('#current-word').html(word);
+		if(playing)
+		{
+			var len = wordArray[highlightedIndex][wordIndex].length;
+			if(len % 2 == 0){
+				wordArray[highlightedIndex][wordIndex] = ' ' + wordArray[highlightedIndex][wordIndex];
+			}
+			var word = colorLetter();
+			$('#current-word').html(word);
+
+			if(word.indexOf(',') != -1){
+				wordsToPause += pauseComma;
+			}
+
+			if(word.indexOf('.') != -1){
+				wordsToPause += pausePeriod;
+			}
+		}
+		else{
+			pause();
+		}
 	}
 	else{
-		pause();
-	}
-	
+		wordsToPause--;
+	}	
 }
 
 function play(){
@@ -163,8 +177,6 @@ function buildWordArray(){
 		paraArray[ii] = paraArray[ii].replace('\n', ' ');
 		wordArray[ii] = paraArray[ii].split(' ');
 	}
-
-	console.log(wordArray);
 }
 
 function saveConfig(){
